@@ -12,11 +12,12 @@ export const RAW_DATA = [
   { first: 'Mihajlo', last: 'KARUPOVIC', q1: 100, q2: 95, q3: 98, q4: 115 },
   { first: 'Pavel', last: 'EICHHOBER', q1: 100, q2: 109, q3: 94, q4: 113 },
   { first: 'Robin', last: 'MAIER', q1: 100, q2: 109, q3: 97, q4: 108 },
+  { first: 'Patrick', last: 'TRAINER', q1: 100, q2: 103, q3: 95, q4: 100 },
 ];
 
-const METRIC_NAMES = ['schnelligkeit', 'technik', 'kraft', 'sprungkraft', 'koordination', 'ausdauer'];
+export const METRIC_NAMES = ['schnelligkeit', 'technik', 'kraft', 'sprungkraft', 'koordination', 'ausdauer'];
 
-export const PLAYERS = RAW_DATA.map((p, idx) => {
+const ALL_MEMBERS = RAW_DATA.map((p, idx) => {
   const globalPerf = [
     { quarter: 'Q1', value: p.q1 },
     { quarter: 'Q2', value: p.q2 },
@@ -35,16 +36,34 @@ export const PLAYERS = RAW_DATA.map((p, idx) => {
   const avg = globalPerf.reduce((acc, curr) => acc + curr.value, 0) / 4;
   const trend = p.q4 > p.q3 ? 'up' : p.q4 < p.q3 ? 'down' : 'stable';
 
+  let role = 'Feldspieler';
+  if (p.last === 'MAIER') role = 'Torwart';
+  if (p.last === 'TRAINER') role = 'Trainer';
+
   return {
     id: `player-${idx}`,
     firstName: p.first,
     lastName: p.last,
-    position: (p.first === 'Robin' && p.last === 'MAIER') ? 'Torwart' : 'Mittelfeld',
+    image: `${p.first}.jpg`,
+    position: role,
+    isStaff: role === 'Trainer',
     performance: globalPerf,
     metrics,
     average: Math.round(avg * 10) / 10,
     trend
   };
+});
+
+// Nur die echten Spieler (ohne Patrick)
+export const PLAYERS = ALL_MEMBERS.filter(m => !m.isStaff);
+
+// Patrick separat
+export const STAFF = ALL_MEMBERS.filter(m => m.isStaff);
+
+// Bestwerte der Mannschaft basierend auf echten Spielern
+export const TEAM_BEST_VALUES = {};
+METRIC_NAMES.forEach(m => {
+  TEAM_BEST_VALUES[m] = Math.max(...PLAYERS.map(p => p.metrics[m][3].value));
 });
 
 export const TEAM_AVERAGES = [

@@ -1,18 +1,34 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
 } from 'recharts';
 import { Activity, Users, Award, TrendingUp } from 'lucide-react';
 
+const PlayerImage = ({ player, className }) => {
+  const [error, setError] = useState(false);
+  return (
+    <div className={`${className} bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center`}>
+      {!error ? (
+        <img 
+          src={player.image} 
+          alt={player.firstName} 
+          className="w-full h-full object-cover"
+          onError={() => setError(true)}
+        />
+      ) : (
+        <span className="font-black text-white">{player.firstName[0]}{player.lastName[0]}</span>
+      )}
+    </div>
+  );
+};
+
 const TeamOverview = ({ players, teamAverages, onSelectPlayer }) => {
   const topPerformers = [...players].sort((a, b) => b.average - a.average).slice(0, 5);
   const teamAvgValue = Math.round(players.reduce((a, b) => a + b.average, 0) / players.length);
   
-  const COLORS = ['#6366f1', '#8b5cf6', '#ec4899', '#f43f5e', '#f59e0b'];
-
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 animate-in fade-in duration-700">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard title="Team Durchschnitt" value={`${teamAvgValue}%`} subtitle="Gesamtperformance 2026" icon={<Activity className="w-6 h-6 text-indigo-600" />} color="bg-indigo-50" />
         <StatCard title="Aktive Spieler" value={players.length.toString()} subtitle="Kadergröße" icon={<Users className="w-6 h-6 text-emerald-600" />} color="bg-emerald-50" />
@@ -22,7 +38,7 @@ const TeamOverview = ({ players, teamAverages, onSelectPlayer }) => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 bg-white p-8 rounded-[40px] shadow-sm border border-slate-200">
-          <h3 className="text-xl font-bold text-slate-800 mb-8">Mannschafts-Entwicklung (Q1-Q4)</h3>
+          <h3 className="text-xl font-black text-slate-800 mb-8 uppercase tracking-tight">Mannschafts-Entwicklung (Q1-Q4)</h3>
           <div className="h-[350px]">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={teamAverages}>
@@ -43,18 +59,18 @@ const TeamOverview = ({ players, teamAverages, onSelectPlayer }) => {
         </div>
 
         <div className="bg-white p-8 rounded-[40px] shadow-sm border border-slate-200">
-          <h3 className="text-lg font-bold text-slate-800 mb-6">Top Spieler (Ranking)</h3>
+          <h3 className="text-lg font-black text-slate-800 mb-6 uppercase tracking-tight">Top Spieler (Ranking)</h3>
           <div className="space-y-4">
             {topPerformers.map((player, idx) => (
               <div key={player.id} className="group flex items-center justify-between p-3 hover:bg-slate-50 rounded-2xl transition-all cursor-pointer" onClick={() => onSelectPlayer(player.id)}>
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold" style={{ backgroundColor: COLORS[idx] }}>{idx + 1}</div>
+                  <PlayerImage player={player} className="w-10 h-10 rounded-xl overflow-hidden shadow-sm text-xs border border-slate-100" />
                   <div>
-                    <p className="font-bold text-slate-800">{player.firstName}</p>
-                    <p className="text-[10px] text-slate-400 font-bold uppercase">{player.lastName}</p>
+                    <p className="font-bold text-slate-800 text-sm">{player.firstName}</p>
+                    <p className="text-[10px] text-slate-400 font-black uppercase tracking-tighter">{player.lastName}</p>
                   </div>
                 </div>
-                <div className="text-right"><p className="text-lg font-bold text-indigo-600">{player.average}%</p></div>
+                <div className="text-right"><p className="text-lg font-black text-indigo-600">{player.average}%</p></div>
               </div>
             ))}
           </div>
@@ -63,16 +79,14 @@ const TeamOverview = ({ players, teamAverages, onSelectPlayer }) => {
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6">
         {players.map(player => (
-          <div key={player.id} onClick={() => onSelectPlayer(player.id)} className="bg-white p-6 rounded-[32px] border border-slate-200 shadow-sm hover:shadow-xl transition-all cursor-pointer group">
+          <div key={player.id} onClick={() => onSelectPlayer(player.id)} className="bg-white p-6 rounded-[32px] border border-slate-200 shadow-sm hover:shadow-xl transition-all cursor-pointer group hover:-translate-y-1">
             <div className="flex flex-col items-center text-center space-y-4">
-              <div className="w-16 h-16 rounded-2xl bg-slate-50 flex items-center justify-center text-xl font-bold text-slate-700 group-hover:bg-indigo-600 group-hover:text-white transition-all">
-                {player.firstName[0]}
-              </div>
+              <PlayerImage player={player} className="w-20 h-20 rounded-2xl overflow-hidden border border-slate-100 group-hover:border-indigo-300 transition-all shadow-inner text-2xl" />
               <div>
-                <h4 className="font-bold text-slate-900">{player.firstName}</h4>
-                <p className="text-[10px] text-slate-400 font-black uppercase">{player.position}</p>
+                <h4 className="font-black text-slate-900 leading-tight uppercase text-sm tracking-tight">{player.firstName}</h4>
+                <p className="text-[9px] text-slate-400 font-black uppercase tracking-widest">{player.position}</p>
               </div>
-              <div className="text-xl font-black text-slate-900">{player.performance[3].value}%</div>
+              <div className="px-4 py-1 bg-slate-900 rounded-full text-xs font-black text-white">{player.performance[3].value}%</div>
             </div>
           </div>
         ))}
@@ -82,12 +96,12 @@ const TeamOverview = ({ players, teamAverages, onSelectPlayer }) => {
 };
 
 const StatCard = ({ title, value, subtitle, icon, color }) => (
-  <div className="bg-white p-6 rounded-[32px] shadow-sm border border-slate-200 flex items-start gap-4">
+  <div className="bg-white p-6 rounded-[32px] shadow-sm border border-slate-200 flex items-start gap-4 transition-transform hover:scale-[1.02]">
     <div className={`p-4 rounded-2xl ${color}`}>{icon}</div>
     <div>
-      <p className="text-xs font-bold text-slate-400 uppercase mb-1">{title}</p>
-      <h4 className="text-2xl font-black text-slate-900 leading-none mb-2">{value}</h4>
-      <p className="text-xs text-slate-500 font-medium">{subtitle}</p>
+      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">{title}</p>
+      <h4 className="text-2xl font-black text-slate-900 leading-none mb-1">{value}</h4>
+      <p className="text-[11px] text-slate-500 font-medium">{subtitle}</p>
     </div>
   </div>
 );
