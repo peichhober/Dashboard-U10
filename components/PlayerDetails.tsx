@@ -2,10 +2,10 @@
 import React, { useState } from 'react';
 import { 
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, AreaChart, Area
+  Radar, RadarChart, PolarGrid, PolarAngleAxis, AreaChart, Area
 } from 'recharts';
 import { 
-  ArrowLeft, BrainCircuit, Target, Zap, History, TrendingUp, Info, Timer, Dribbble, BicepsFlexed, MoveUp, Gamepad2, HeartPulse
+  ArrowLeft, BrainCircuit, Target, Zap, Timer, Dribbble, BicepsFlexed, MoveUp, Gamepad2, HeartPulse
 } from 'lucide-react';
 import { GoogleGenAI } from "@google/genai";
 import { TEAM_AVERAGES } from '../constants';
@@ -39,6 +39,7 @@ const PlayerDetails = ({ player, teamAverages, onBack }) => {
       });
       setAnalysis(response.text || "Analyse nicht verfügbar.");
     } catch (err) {
+      console.error(err);
       setAnalysis("Fehler bei der KI-Analyse.");
     } finally {
       setLoadingAnalysis(false);
