@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Users, User, LayoutDashboard, ChevronLeft, ChevronRight, ShieldCheck } from 'lucide-react';
+import { LayoutDashboard, ChevronLeft, ChevronRight, ShieldCheck, X } from 'lucide-react';
 
 const PlayerAvatar = ({ player, size = "small" }) => {
   const [error, setError] = useState(false);
@@ -32,27 +32,28 @@ const PlayerAvatar = ({ player, size = "small" }) => {
 const Sidebar = ({ players, staff, selectedId, onSelect, isOpen, toggleOpen }) => {
   return (
     <aside 
-      className={`fixed md:relative z-20 h-screen transition-all duration-300 ease-in-out border-r border-slate-200 bg-white flex flex-col shadow-xl md:shadow-none
-      ${isOpen ? 'w-72 translate-x-0' : 'w-0 md:w-20 -translate-x-full md:translate-x-0 overflow-hidden'}`}
+      className={`fixed md:relative z-40 h-screen transition-all duration-300 ease-in-out border-r border-slate-200 bg-white flex flex-col shadow-2xl md:shadow-none
+      ${isOpen 
+        ? 'w-[85vw] sm:w-72 translate-x-0' 
+        : '-translate-x-full md:translate-x-0 md:w-20 lg:w-72 overflow-hidden'}`}
     >
-      <div className="p-6 flex items-center justify-between border-b border-slate-100 h-18">
-        {isOpen ? (
-          <h2 className="font-black text-slate-800 flex items-center gap-2 uppercase tracking-tight text-sm">
-            <ShieldCheck className="w-5 h-5 text-indigo-600" />
-            Performance Hub
-          </h2>
-        ) : (
-          <ShieldCheck className="w-6 h-6 text-indigo-600 mx-auto" />
-        )}
+      <div className="p-5 flex items-center justify-between border-b border-slate-100 min-h-[64px] md:min-h-[72px]">
+        <h2 className={`font-black text-slate-800 flex items-center gap-2 uppercase tracking-tight text-sm ${!isOpen && 'md:hidden'}`}>
+          <ShieldCheck className="w-5 h-5 text-indigo-600" />
+          Performance Hub
+        </h2>
+        <ShieldCheck className={`w-6 h-6 text-indigo-600 mx-auto ${isOpen ? 'hidden' : 'hidden md:block'}`} />
+        
         <button 
           onClick={toggleOpen}
-          className="p-1 rounded-lg hover:bg-slate-100 text-slate-400 hidden md:block"
+          className="p-2 rounded-xl hover:bg-slate-100 text-slate-400"
         >
-          {isOpen ? <ChevronLeft className="w-5 h-5" /> : <ChevronRight className="w-5 h-5" />}
+          {isOpen ? <X className="w-5 h-5 md:hidden" /> : <ChevronRight className="w-5 h-5 hidden md:block lg:hidden" />}
+          {isOpen && <ChevronLeft className="w-5 h-5 hidden lg:block" />}
         </button>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-4 py-6">
+      <div className="flex-1 overflow-y-auto px-4 py-6 scrollbar-hide">
         <nav className="space-y-1">
           <button
             onClick={() => onSelect(null)}
@@ -62,15 +63,12 @@ const Sidebar = ({ players, staff, selectedId, onSelect, isOpen, toggleOpen }) =
                 : 'text-slate-600 hover:bg-slate-50'}`}
           >
             <LayoutDashboard className={`w-5 h-5 ${selectedId === null ? 'text-white' : 'text-slate-400 group-hover:text-indigo-600'}`} />
-            {isOpen && <span className="font-bold text-sm uppercase tracking-tight">Übersicht</span>}
+            <span className={`font-bold text-sm uppercase tracking-tight ${!isOpen && 'md:hidden'}`}>Übersicht</span>
           </button>
           
           <div className="pt-8 pb-2">
-            {isOpen ? (
-              <p className="px-3 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Kader (U10)</p>
-            ) : (
-              <div className="w-8 mx-auto border-t border-slate-100 my-2" />
-            )}
+            <p className={`px-3 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ${!isOpen && 'md:hidden'}`}>Kader (U10)</p>
+            {!isOpen && <div className="w-8 mx-auto border-t border-slate-100 my-2 hidden md:block" />}
           </div>
 
           <div className="space-y-1">
@@ -84,27 +82,22 @@ const Sidebar = ({ players, staff, selectedId, onSelect, isOpen, toggleOpen }) =
                     : 'text-slate-600 hover:bg-slate-50'}`}
               >
                 <PlayerAvatar player={player} />
-                {isOpen && (
-                  <div className="flex flex-col items-start overflow-hidden text-left">
-                    <span className="font-bold text-sm whitespace-nowrap truncate w-full tracking-tight">{player.firstName}</span>
-                    <span className={`text-[9px] uppercase font-black tracking-wider ${selectedId === player.id ? 'text-indigo-400' : 'text-slate-400'}`}>
-                      {player.lastName}
-                    </span>
-                  </div>
-                )}
+                <div className={`flex flex-col items-start overflow-hidden text-left ${!isOpen && 'md:hidden'}`}>
+                  <span className="font-bold text-sm whitespace-nowrap truncate w-full tracking-tight">{player.firstName}</span>
+                  <span className={`text-[9px] uppercase font-black tracking-wider ${selectedId === player.id ? 'text-indigo-400' : 'text-slate-400'}`}>
+                    {player.lastName}
+                  </span>
+                </div>
               </button>
             ))}
           </div>
 
           <div className="pt-8 pb-2">
-            {isOpen ? (
-              <p className="px-3 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Trainer & Stab</p>
-            ) : (
-              <div className="w-8 mx-auto border-t border-slate-100 my-2" />
-            )}
+            <p className={`px-3 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ${!isOpen && 'md:hidden'}`}>Trainer & Stab</p>
+            {!isOpen && <div className="w-8 mx-auto border-t border-slate-100 my-2 hidden md:block" />}
           </div>
 
-          <div className="space-y-1">
+          <div className="space-y-1 pb-4">
             {staff.map(member => (
               <button
                 key={member.id}
@@ -115,31 +108,27 @@ const Sidebar = ({ players, staff, selectedId, onSelect, isOpen, toggleOpen }) =
                     : 'text-slate-600 hover:bg-slate-50'}`}
               >
                 <PlayerAvatar player={member} />
-                {isOpen && (
-                  <div className="flex flex-col items-start overflow-hidden text-left">
-                    <span className="font-bold text-sm whitespace-nowrap truncate w-full tracking-tight">{member.firstName}</span>
-                    <span className={`text-[9px] uppercase font-black tracking-wider ${selectedId === member.id ? 'text-slate-400' : 'text-slate-400'}`}>
-                      {member.lastName}
-                    </span>
-                  </div>
-                )}
+                <div className={`flex flex-col items-start overflow-hidden text-left ${!isOpen && 'md:hidden'}`}>
+                  <span className="font-bold text-sm whitespace-nowrap truncate w-full tracking-tight">{member.firstName}</span>
+                  <span className={`text-[9px] uppercase font-black tracking-wider ${selectedId === member.id ? 'text-slate-400' : 'text-slate-400'}`}>
+                    {member.lastName}
+                  </span>
+                </div>
               </button>
             ))}
           </div>
         </nav>
       </div>
 
-      <div className="p-4 border-t border-slate-100 bg-slate-50/50">
-        <div className={`flex items-center gap-3 ${isOpen ? 'p-2' : 'justify-center'}`}>
+      <div className={`p-4 border-t border-slate-100 bg-slate-50/50 ${!isOpen && 'md:hidden'}`}>
+        <div className="flex items-center gap-3 p-2">
           <div className="w-9 h-9 rounded-xl bg-white border border-slate-200 flex items-center justify-center overflow-hidden shadow-sm">
-            <User className="w-5 h-5 text-slate-400" />
+            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
           </div>
-          {isOpen && (
-            <div className="overflow-hidden">
-              <p className="text-[11px] font-black text-slate-800 truncate uppercase tracking-tight">Admin System</p>
-              <p className="text-[9px] text-slate-400 font-bold uppercase">v1.0.4-Excellence</p>
-            </div>
-          )}
+          <div className="overflow-hidden">
+            <p className="text-[11px] font-black text-slate-800 truncate uppercase tracking-tight">System Online</p>
+            <p className="text-[9px] text-slate-400 font-bold uppercase">v1.0.5-Mobile-Ready</p>
+          </div>
         </div>
       </div>
     </aside>
