@@ -5,8 +5,7 @@
   "description": "High-Performance Sports Analytics Dashboard mit Gemini AI Integration",
   "main": "index.html",
   "scripts": {
-    "start": "npx serve .",
-    "build": "echo 'Static build - no transformation needed'"
+    "start": "npx serve ."
   },
   "keywords": [
     "sports",
