@@ -1,20 +1,31 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
 
-# Run and deploy your AI Studio app
+# ProTeam Performance Dashboard 2026
 
-This contains everything you need to run your app locally.
+Ein modernes Dashboard für sportwissenschaftliche Leistungsdiagnostik, entwickelt für die **FC Academy**. Die App nutzt die **Google Gemini AI**, um individuelle Spieleranalysen basierend auf Quartalswerten zu erstellen.
 
-View your app in AI Studio: https://ai.studio/apps/drive/1d87UAshha_6m3HPA6whE9cHwoJjIlq7y
+## 🚀 Features
+- **Team-Übersicht**: Visualisierung der Mannschaftsentwicklung (Q1-Q4).
+- **Spieler-Details**: Detaillierte Profile für alle Spieler (Mittelfeld & Torwart).
+- **Individuelle Metriken**: Tracking von Schnelligkeit, Technik, Kraft, Sprungkraft, Koordination und Ausdauer.
+- **AI Analyst**: Automatische Generierung von sportwissenschaftlichen Einschätzungen via Gemini 3 Flash.
+- **Modernes UI**: Basierend auf Tailwind CSS und Lucide Icons.
 
-## Run Locally
+## 🛠 Installation & Deployment
 
-**Prerequisites:**  Node.js
+### Lokal starten
+1. Repository klonen.
+2. Im Root-Verzeichnis einen lokalen Server starten (z.B. mit `npx serve .`).
 
+### Vercel Deployment
+Dieses Projekt ist für den Export via **Vercel** optimiert:
+1. Projekt auf GitHub hochladen.
+2. Mit Vercel verbinden.
+3. **WICHTIG**: Unter `Settings > Environment Variables` eine neue Variable hinzufügen:
+   - Key: `API_KEY`
+   - Value: `DEIN_GEMINI_API_KEY` (Erstellbar unter [Google AI Studio](https://aistudio.google.com/))
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## 📊 Datenstruktur
+Die Leistungsdaten werden in der `constants.ts` verwaltet. Die App berechnet automatisch Trends und Durchschnittswerte für die Visualisierung in Recharts-Diagrammen.
+
+---
+Developed with ❤️ for ProTeam Excellence.

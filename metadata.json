@@ -1,5 +1,7 @@
 {
   "name": "ProTeam Performance Dashboard",
-  "description": "A high-performance sports analytics dashboard for tracking player development across quarterly assessments, featuring team-wide comparisons and individual player AI-driven insights.",
-  "requestFramePermissions": []
+  "description": "Professional sports analytics with AI-driven insights for football academies.",
+  "requestFramePermissions": [],
+  "version": "1.0.0",
+  "github_repo": "https://github.com/user/proteam-dashboard"
 }
