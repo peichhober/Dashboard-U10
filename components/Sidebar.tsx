@@ -1,17 +1,8 @@
 
 import React from 'react';
-import { Users, User, LayoutDashboard, ChevronLeft, ChevronRight, Search } from 'lucide-react';
-import { Player } from '../types';
+import { Users, User, LayoutDashboard, ChevronLeft, ChevronRight } from 'lucide-react';
 
-interface SidebarProps {
-  players: Player[];
-  selectedId: string | null;
-  onSelect: (id: string | null) => void;
-  isOpen: boolean;
-  toggleOpen: () => void;
-}
-
-const Sidebar: React.FC<SidebarProps> = ({ players, selectedId, onSelect, isOpen, toggleOpen }) => {
+const Sidebar = ({ players, selectedId, onSelect, isOpen, toggleOpen }) => {
   return (
     <aside 
       className={`fixed md:relative z-20 h-screen transition-all duration-300 ease-in-out border-r border-slate-200 bg-white flex flex-col shadow-xl md:shadow-none

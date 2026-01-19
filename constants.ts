@@ -1,6 +1,4 @@
 
-import { Player, PerformanceData } from './types';
-
 export const RAW_DATA = [
   { first: 'Ajdin', last: 'CVIKO', q1: 100, q2: 115, q3: 86, q4: 119 },
   { first: 'Armin', last: 'PATE', q1: 100, q2: 108, q3: 101, q4: 110 },
@@ -18,16 +16,15 @@ export const RAW_DATA = [
 
 const METRIC_NAMES = ['schnelligkeit', 'technik', 'kraft', 'sprungkraft', 'koordination', 'ausdauer'];
 
-// Fix: Explicitly type PLAYERS as Player[] to resolve type mismatch errors in App.tsx
-export const PLAYERS: Player[] = RAW_DATA.map((p, idx) => {
-  const globalPerf: PerformanceData[] = [
+export const PLAYERS = RAW_DATA.map((p, idx) => {
+  const globalPerf = [
     { quarter: 'Q1', value: p.q1 },
     { quarter: 'Q2', value: p.q2 },
     { quarter: 'Q3', value: p.q3 },
     { quarter: 'Q4', value: p.q4 },
   ];
 
-  const metrics: { [key: string]: PerformanceData[] } = {};
+  const metrics = {};
   METRIC_NAMES.forEach((m, mIdx) => {
     metrics[m] = globalPerf.map(gp => ({
       quarter: gp.quarter,
@@ -36,7 +33,7 @@ export const PLAYERS: Player[] = RAW_DATA.map((p, idx) => {
   });
 
   const avg = globalPerf.reduce((acc, curr) => acc + curr.value, 0) / 4;
-  const trend: 'up' | 'down' | 'stable' = p.q4 > p.q3 ? 'up' : p.q4 < p.q3 ? 'down' : 'stable';
+  const trend = p.q4 > p.q3 ? 'up' : p.q4 < p.q3 ? 'down' : 'stable';
 
   return {
     id: `player-${idx}`,
@@ -50,8 +47,7 @@ export const PLAYERS: Player[] = RAW_DATA.map((p, idx) => {
   };
 });
 
-// Fix: Explicitly type TEAM_AVERAGES as PerformanceData[] to match component requirements
-export const TEAM_AVERAGES: PerformanceData[] = [
+export const TEAM_AVERAGES = [
   { quarter: 'Q1', value: Math.round(PLAYERS.reduce((a, b) => a + b.performance[0].value, 0) / PLAYERS.length) },
   { quarter: 'Q2', value: Math.round(PLAYERS.reduce((a, b) => a + b.performance[1].value, 0) / PLAYERS.length) },
   { quarter: 'Q3', value: Math.round(PLAYERS.reduce((a, b) => a + b.performance[2].value, 0) / PLAYERS.length) },
