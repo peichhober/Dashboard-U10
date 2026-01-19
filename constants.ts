@@ -1,6 +1,4 @@
 
-import { Player, MetricKey, PerformanceData } from './types';
-
 export const RAW_DATA = [
   { first: 'Ajdin', last: 'CVIKO', q1: 100, q2: 115, q3: 86, q4: 119 },
   { first: 'Armin', last: 'PATE', q1: 100, q2: 108, q3: 101, q4: 110 },
@@ -16,9 +14,9 @@ export const RAW_DATA = [
   { first: 'Robin', last: 'MAIER', q1: 100, q2: 109, q3: 97, q4: 108 },
 ];
 
-const METRIC_NAMES: MetricKey[] = ['schnelligkeit', 'technik', 'kraft', 'sprungkraft', 'koordination', 'ausdauer'];
+const METRIC_NAMES = ['schnelligkeit', 'technik', 'kraft', 'sprungkraft', 'koordination', 'ausdauer'];
 
-export const PLAYERS: Player[] = RAW_DATA.map((p, idx) => {
+export const PLAYERS = RAW_DATA.map((p, idx) => {
   const globalPerf = [
     { quarter: 'Q1', value: p.q1 },
     { quarter: 'Q2', value: p.q2 },
@@ -26,12 +24,10 @@ export const PLAYERS: Player[] = RAW_DATA.map((p, idx) => {
     { quarter: 'Q4', value: p.q4 },
   ];
 
-  // Generate varied metrics based on the global average to simulate realistic data
-  const metrics: Record<MetricKey, PerformanceData[]> = {} as any;
+  const metrics = {};
   METRIC_NAMES.forEach((m, mIdx) => {
     metrics[m] = globalPerf.map(gp => ({
       quarter: gp.quarter,
-      // Add some deterministic variance per metric so each player looks unique
       value: Math.round(gp.value + (Math.sin(idx + mIdx) * 5))
     }));
   });
