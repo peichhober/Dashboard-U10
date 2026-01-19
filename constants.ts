@@ -15,7 +15,16 @@ export const RAW_DATA = [
   { first: 'Patrick', last: 'TRAINER', q1: 100, q2: 103, q3: 95, q4: 100 },
 ];
 
-export const METRIC_NAMES = ['schnelligkeit', 'technik', 'kraft', 'sprungkraft', 'koordination', 'ausdauer'];
+export const METRIC_CONFIG = {
+  schnelligkeit: { label: 'Schnelligkeit', unit: 's', baseline: 13.5, type: 'inverse' },
+  technik: { label: 'Technik', unit: 'Pkt', baseline: 100, type: 'direct' },
+  kraft: { label: 'Kraft', unit: 'Index', baseline: 100, type: 'direct' },
+  sprungkraft: { label: 'Sprungkraft', unit: 'cm', baseline: 35, type: 'direct' },
+  koordination: { label: 'Koordination', unit: 'Pkt', baseline: 100, type: 'direct' },
+  ausdauer: { label: 'Ausdauer', unit: 'Index', baseline: 100, type: 'direct' },
+};
+
+export const METRIC_NAMES = Object.keys(METRIC_CONFIG);
 
 const ALL_MEMBERS = RAW_DATA.map((p, idx) => {
   const globalPerf = [
@@ -44,6 +53,7 @@ const ALL_MEMBERS = RAW_DATA.map((p, idx) => {
     id: `player-${idx}`,
     firstName: p.first,
     lastName: p.last,
+    // Verknüpfung zu JPGs. Falls nicht vorhanden, greift der Fallback in der UI
     image: `${p.first}.jpg`,
     position: role,
     isStaff: role === 'Trainer',
@@ -54,13 +64,9 @@ const ALL_MEMBERS = RAW_DATA.map((p, idx) => {
   };
 });
 
-// Nur die echten Spieler (ohne Patrick)
 export const PLAYERS = ALL_MEMBERS.filter(m => !m.isStaff);
-
-// Patrick separat
 export const STAFF = ALL_MEMBERS.filter(m => m.isStaff);
 
-// Bestwerte der Mannschaft basierend auf echten Spielern
 export const TEAM_BEST_VALUES = {};
 METRIC_NAMES.forEach(m => {
   TEAM_BEST_VALUES[m] = Math.max(...PLAYERS.map(p => p.metrics[m][3].value));
